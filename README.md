@@ -13,12 +13,12 @@ You can refer to the ``` .env-example ``` file to see how the files should look,
 
 ``` .env.development ``` should contain the following:
 ```
-PGDATABASE=nc_news;
+PGDATABASE=nc_news
 ```
 
 and ``` .env.test ``` should contain the following:
 ```
-PGDATABASE=nc_news_test;
+PGDATABASE=nc_news_test
 ```
 
 This will connect the two databases and everything should work as expected.
