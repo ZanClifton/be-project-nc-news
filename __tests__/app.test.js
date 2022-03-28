@@ -33,3 +33,41 @@ describe("GET /api/topics", () => {
         });
     });
 });
+
+describe("GET /api/articles/:article_id", () => {
+    test("200: returns a single matching article", () => {
+        const article_id = 2;
+        return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(200)
+        .then((res) => {
+            expect(res.body.article).toEqual({
+                author: "icellusedkars",
+                title: "Sony Vaio; or, The Laptop",
+                article_id: 2,
+                body: expect.any(String),
+                topic: "mitch",
+                created_at: "2020-10-16T05:03:00.000Z",
+                votes: 0
+            })
+        });
+    });
+    test("404: returns an error if the article is not found", () => {
+        const article_id = 1000;
+        return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(404)
+        .then((res) => {
+            expect(res.body).toEqual({ msg: "not found!" })
+        });
+    });
+    test("400: returns an error for invalid article id", () => {
+        const article_id = "21b4";
+        return request(app)
+        .get(`/api/articles/${article_id}`)
+        .expect(400)
+        .then((res) => {
+            expect(res.body).toEqual({ msg: "bad request!" })
+        });
+    });
+});
