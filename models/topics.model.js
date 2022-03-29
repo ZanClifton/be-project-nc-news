@@ -8,3 +8,4 @@ exports.findTopics = () => {
         return results.rows;
     });
 };
+
