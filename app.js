@@ -30,8 +30,10 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res) => {
-    // console.log(err, "<< 500 Error")
-    res.status(500).send({ msg: "it broke!" });
+    if (err) {
+        console.log(err, "<< 500 Error")
+        res.status(500).send({ msg: "it broke!" });
+    };
 });
 
 module.exports = app;
