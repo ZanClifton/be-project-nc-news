@@ -2,23 +2,24 @@ const {
     findTopics, 
     findArticle } = require("../models/app.model");
 
-exports.getTopics = (req, res, next) => {
-    findTopics()
-    .then((topics) => {
+exports.getTopics = async (req, res, next) => {
+    try {
+        const topics = await findTopics();
+    
         res.send({ topics });
-    })
-    .catch((err) => {
+    }
+    catch (err) {
         next(err);
-    });
+    };
 };
 
-exports.getArticle = (req, res, next) => {
-    const { article_id } = req.params;
-    findArticle(article_id)
-    .then((article) => {
+exports.getArticle = async (req, res, next) => {
+    try {
+        const { article_id } = req.params;
+        const article = await findArticle(article_id)
         res.send({ article })
-    })
-    .catch((err) => {
+    }
+    catch (err) {
         next(err);
-    });
+    };
 };
