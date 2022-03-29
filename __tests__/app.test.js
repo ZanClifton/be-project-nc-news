@@ -60,3 +60,25 @@ describe("GET /api/articles/:article_id", () => {
         expect(res.body).toEqual({ msg: "bad request!" });
     });
 });
+
+describe("GET /api/users", () => {
+    test("200: returns array of user objects each with the username property", async () => {
+        const res = await request(app)
+            .get("/api/users")
+            .expect(200);
+            console.log(res.body)
+        res.body.users.forEach((user) => {
+            expect(user).toEqual(
+                expect.objectContaining({
+                    username: expect.any(String)
+                })
+            );
+        });
+    });
+    test("404: returns an error if the path is not found", async () => {
+        const res = await request(app)
+            .get("/api/yusarz")
+            .expect(404);
+        expect(res.body).toEqual({ msg: "not found!" });
+    });
+});
