@@ -1,11 +1,13 @@
 const { findTopics } = require("../models/topics.model");
 
-exports.getTopics = (req, res, next) => {
-    findTopics()
-    .then((topics) => {
+exports.getTopics = async (req, res, next) => {
+    try {
+        const topics = await findTopics();
+    
         res.send({ topics });
-    })
-    .catch((err) => {
+    }
+    catch (err) {
         next(err);
-    });
+    };
 };
+
