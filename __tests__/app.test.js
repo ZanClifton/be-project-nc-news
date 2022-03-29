@@ -13,7 +13,6 @@ describe("GET /api/topics", () => {
             .get("/api/topics")
             .expect(200);
         res.body.topics.forEach((topic) => {
-            // console.log(topic)
             expect(topic).toEqual(
                 expect.objectContaining({
                     slug: expect.any(String),
@@ -40,7 +39,6 @@ describe("PATCH /api/articles/:article_id", () => {
             .patch(`/api/articles/${article_id}`)
             .send(amendVote)
             .expect(200);
-        console.log(res.body);
         expect(res.body.article).toEqual({
             article_id: 5,
             title: "UNCOVERED: catspiracy to bring down democracy",
@@ -60,7 +58,6 @@ describe("PATCH /api/articles/:article_id", () => {
             .patch(`/api/articles/${article_id}`)
             .send(amendVote)
             .expect(200);
-        console.log(res.body);
         expect(res.body.article).toEqual({
             article_id: 1,
             title: "Living in the shadow of a great man",
