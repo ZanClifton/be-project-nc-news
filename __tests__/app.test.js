@@ -29,33 +29,75 @@ describe("GET /api/topics", () => {
     });
 });
 
-describe("GET /api/articles/:article_id", () => {
-    test("200: returns a single matching article", async () => {
-        const article_id = 2;
+describe("PATCH /api/articles/:article_id", () => {
+    test("200: increases vote count on article and returns the updated article", async () => {
+        const newVote = 1
+        const amendVote = { inc_votes: newVote }
+        const article_id = 5
+
         const res = await request(app)
-            .get(`/api/articles/${article_id}`)
+            .patch(`/api/articles/${article_id}`)
+            .send(amendVote)
             .expect(200);
         expect(res.body.article).toEqual({
-            author: "icellusedkars",
-            title: "Sony Vaio; or, The Laptop",
-            article_id: 2,
-            body: expect.any(String),
+            article_id: 5,
+            title: "UNCOVERED: catspiracy to bring down democracy",
+            topic: "cats",
+            author: "rogersop",
+            body: "Bastet walks amongst us, and the cats are taking arms!",
+            created_at: "2020-08-03T13:14:00.000Z",
+            votes: 1
+        });
+    });
+    test("200: decreases vote count on article and returns the updated article", async () => {
+        const newVote = -1
+        const amendVote = { inc_votes: newVote }
+        const article_id = 1
+
+        const res = await request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(amendVote)
+            .expect(200);
+        expect(res.body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
             topic: "mitch",
-            created_at: "2020-10-16T05:03:00.000Z",
-            votes: 0
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 99
         });
     });
     test("404: returns an error if the article is not found", async () => {
-        const article_id = 1000;
+        const newVote = 1
+        const amendVote = { inc_votes: newVote }
+        const article_id = 500
+
         const res = await request(app)
-            .get(`/api/articles/${article_id}`)
+            .patch(`/api/articles/${article_id}`)
+            .send(amendVote)
             .expect(404);
         expect(res.body).toEqual({ msg: "not found!" });
     });
-    test("400: returns an error for invalid article id", async () => {
-        const article_id = "21b4";
+    test("400: returns an error if the article id is the wrong type", async () => {
+        const newVote = 1
+        const amendVote = { inc_votes: newVote }
+        const article_id = "46a1"
+
         const res = await request(app)
-            .get(`/api/articles/${article_id}`)
+            .patch(`/api/articles/${article_id}`)
+            .send(amendVote)
+            .expect(400);
+        expect(res.body).toEqual({ msg: "bad request!" });
+    });
+    test("400: returns an error if the article body is the wrong type", async () => {
+        const newVote = "23f4"
+        const amendVote = { inc_votes: newVote }
+        const article_id = 1
+
+        const res = await request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send(amendVote)
             .expect(400);
         expect(res.body).toEqual({ msg: "bad request!" });
     });
