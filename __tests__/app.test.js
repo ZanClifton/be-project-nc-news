@@ -8,6 +8,44 @@ afterAll(() => db.end());
 beforeEach(() => seed(testData));
 
 describe("ARTICLES", () => {
+    describe("GET /api/articles/:article_id", () => {
+        describe("Happy Path", () => {
+            test("200: returns a single matching article", async () => {
+                const article_id = 2;
+
+                const res = await request(app)
+                .get(`/api/articles/${article_id}`)
+                .expect(200);
+            expect(res.body.article).toEqual({
+                author: "icellusedkars",
+                title: "Sony Vaio; or, The Laptop",
+                article_id: 2,
+                body: expect.any(String),
+                topic: "mitch",
+                created_at: "2020-10-16T05:03:00.000Z",
+                votes: 0
+            });
+        });
+    });
+        describe("Unhappy Path", () => {
+            test("404: returns an error if the article is not found", async () => {
+                const article_id = 1000;
+                const res = await request(app)
+                .get(`/api/articles/${article_id}`)
+                .expect(404);
+            expect(res.body).toEqual({ msg: "not found!" });
+            });
+        });
+        test("400: returns an error for invalid article id", async () => {
+            const article_id = "21b4";
+
+            const res = await request(app)
+            .get(`/api/articles/${article_id}`)
+            .expect(400);
+        expect(res.body).toEqual({ msg: "bad request!" });
+        });
+    });
+
     describe("GET /api/articles/:article_id?search=comment_count", () => {
         describe("Happy Path", () => {
             test("200: returns the article response object with comment_count added", async () => {
@@ -184,4 +222,3 @@ describe("USERS", () => {
         });
     });
 });
-
