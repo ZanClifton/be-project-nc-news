@@ -8,6 +8,38 @@ afterAll(() => db.end());
 beforeEach(() => seed(testData));
 
 describe("ARTICLES", () => {
+    describe("GET /api/articles", () => {
+        describe("Happy Path", () => {
+            test("200: returns array of articles with the comment_count property", async () => {
+                const res = await request(app)
+                    .get("/api/articles")
+                    .expect(200);
+                expect(res.body.articles).toHaveLength(12);
+                res.body.articles.forEach((article) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            article_id: expect.any(Number),
+                            title: expect.any(String),
+                            topic: expect.any(String),
+                            author: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(String)
+                        })
+                    );
+                });
+            });
+        });
+        describe("Unhappy Path", () => {
+            test.only("404: returns an error if the path is not found", async () => {
+                const res = await request(app)
+                    .get("/api/ourtickles")
+                    .expect(404);
+                expect(res.body).toEqual({ msg: "not found!" });
+            });
+        });
+    });
+
     describe("GET /api/articles/:article_id", () => {
         describe("Happy Path", () => {
             test("200: returns a single matching article", async () => {
@@ -222,3 +254,5 @@ describe("USERS", () => {
         });
     });
 });
+
+
