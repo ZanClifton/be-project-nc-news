@@ -103,3 +103,39 @@ describe("PATCH /api/articles/:article_id", () => {
     });
 });
 
+describe("GET /api/articles/:article_id?search=comment_count", () => {
+    test("200: returns the article response object with comment_count added", async () => {
+        const article_id = 1;
+
+        const res = await request(app)
+            .get(`/api/articles/${article_id}?search=comment_count`)
+            .expect(200);
+
+        expect(res.body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 100,
+            comment_count: "11"  
+        });
+    });
+    test("404: returns an error if the article is not found", async () => {
+        const article_id = 500
+
+        const res = await request(app)
+            .get(`/api/articles/${article_id}?search=comment_count`)
+            .expect(404);
+        expect(res.body).toEqual({ msg: "not found!" });
+    });
+    test("400: returns an error if the article id is the wrong type", async () => {
+        const article_id = "46a1"
+
+        const res = await request(app)
+            .get(`/api/articles/${article_id}?search=comment_count`)
+            .expect(400);
+        expect(res.body).toEqual({ msg: "bad request!" });
+    });
+});

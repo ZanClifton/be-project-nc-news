@@ -1,9 +1,11 @@
-const { changeArticle, findArticle } = require("../models/articles.model");
+const { findArticle, changeArticle,  } = require("../models/articles.model");
 
 exports.getArticle = async (req, res, next) => {
     try {
         const { article_id } = req.params;
-        const article = await findArticle(article_id)
+        const { search } = req.query;
+
+        const article = await findArticle(article_id, search);
         res.send({ article })
     }
     catch (err) {
