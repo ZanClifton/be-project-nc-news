@@ -31,7 +31,7 @@ describe("ARTICLES", () => {
             });
         });
         describe("Unhappy Path", () => {
-            test.only("404: returns an error if the path is not found", async () => {
+            test("404: returns an error if the path is not found", async () => {
                 const res = await request(app)
                     .get("/api/ourtickles")
                     .expect(404);
