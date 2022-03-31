@@ -1,4 +1,5 @@
 const { findArticles, findArticle, changeArticle,  } = require("../models/articles.model");
+const { findComments } = require("../models/comments.model");
 
 exports.getArticles = async (req, res, next) => {
     try { 
@@ -20,6 +21,22 @@ exports.getArticle = async (req, res, next) => {
     }
     catch (err) {
         next(err);
+    };
+};
+
+exports.getArticleComments = async (req, res, next) => {
+    try {
+        const { article_id } = req.params;
+
+        const dbQueries = [findComments(article_id)];
+        if (article_id) dbQueries.push(findArticle(article_id));
+
+        const results = await Promise.all(dbQueries);
+        const comments = results[0];
+        
+        res.send({ comments });
+    } catch (err) {
+        next(err)
     };
 };
 
