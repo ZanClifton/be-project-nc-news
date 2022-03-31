@@ -1,5 +1,22 @@
 const db = require("../db/connection");
 
+exports.findArticles = async () => {
+    let queryStr = `
+    SELECT articles.article_id, articles.title, topic, 
+        articles.author, articles.created_at, articles.votes, 
+        COUNT(comments.body) AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    GROUP BY articles.article_id, articles.title, topic, 
+        articles.author, articles.body, articles.created_at, 
+        articles.votes
+    ORDER BY created_at DESC;
+    `;
+
+    const results = await db.query(queryStr);
+    return results.rows;
+};
+
 exports.findArticle = async (article_id, search) => {
     let queryStr = `SELECT `;
     
@@ -23,7 +40,7 @@ exports.findArticle = async (article_id, search) => {
 
     queryStr += `;`
 
-    console.log(queryStr, "<< in the model")
+    // console.log(queryStr, "<< in the model")
 
     const results = await db.query(queryStr, [article_id]);
     if (results.rows.length === 0) {
@@ -46,3 +63,4 @@ exports.changeArticle = async (edit, article_id) => {
     };
     return results.rows[0]; 
 };
+
