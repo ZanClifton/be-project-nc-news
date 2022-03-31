@@ -7,9 +7,7 @@ exports.findArticles = async () => {
         COUNT(comments.body) AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id, articles.title, topic, 
-        articles.author, articles.body, articles.created_at, 
-        articles.votes
+    GROUP BY articles.article_id
     ORDER BY created_at DESC;
     `;
 
@@ -32,36 +30,6 @@ exports.findArticle = async (article_id) => {
 
     return results.rows[0];
 };
-
-// exports.findArticle = async (article_id, search) => {
-//     let queryStr = `SELECT `;
-    
-//     if (search) {
-//         queryStr += `articles.article_id, articles.title, topic, 
-//             articles.author, articles.body, articles.created_at, 
-//             articles.votes, COUNT(comments.body) AS comment_count
-//     FROM articles
-//     JOIN comments ON comments.article_id = articles.article_id `
-//     } else {   
-//         queryStr += `* FROM articles `
-//     }
-        
-//     queryStr += `WHERE articles.article_id = $1`;
-
-//     if (search) {
-//         queryStr += ` GROUP BY articles.article_id, articles.title, 
-//             topic, articles.author, articles.body, articles.created_at, 
-//             articles.votes`
-//     }
-
-//     queryStr += `;`
-
-//     // console.log(queryStr, "<< in the model")
-
-//     const results = await db.query(queryStr, [article_id]);
-    
-//     return results.rows[0];
-// }
 
 exports.changeArticle = async (edit, article_id) => {
     const { inc_votes } = edit;
