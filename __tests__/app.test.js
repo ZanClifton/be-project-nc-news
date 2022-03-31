@@ -245,6 +245,102 @@ describe("ARTICLES", () => {
                 expect(res.body).toEqual({ msg: "bad request!" });
             });
         });
+    });
+    describe("POST /api.articles/:article_id/comments", () => {
+        describe("Happy Path", () => {
+            test("201: post new comment to article", async () => {
+                const article_id = 2;
+                const commentBody = {
+                    username: "butter_bridge",
+                    body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
+                };
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(201)
+    
+                const expected = {
+                    comment_id: expect.any(Number),
+                    author: "butter_bridge",
+                    body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much.",
+                    article_id: 2,
+                    votes: expect.any(Number),
+                    created_at: expect.any(String)
+                }
+    
+                expect(res.body.comment).toMatchObject(expected);
+            });
+        });
+        describe("Unhappy Path", () => {
+            test("404: returns error if article_id is not found", async () => {
+                const article_id = 500;
+                const commentBody = {
+                    username: "butter_bridge",
+                    body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
+                };
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(404)
+    
+                expect(res.body).toEqual({ msg: "not found!" });
+            });
+            test("404: returns error if author is not found", async () => {
+                const article_id = 2;
+                const commentBody = {
+                    username: "pail_shrelington",
+                    body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
+                };
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(404)
+    
+                expect(res.body).toEqual({ msg: "not found!" });
+            });
+            test("400: returns error if invalid article_id is used", async () => {
+                const article_id = "21b4";
+                const commentBody = {
+                    username: "butter_bridge",
+                    body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
+                };
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(400)
+    
+                expect(res.body).toEqual({ msg: "bad request!" });
+            });
+            test("400: returns error if incorrect key names are used", async () => {
+                const article_id = 2;
+                const commentBody = {
+                    author: "butter_bridge",
+                    bawdy: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
+                };
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(400)
+    
+                expect(res.body).toEqual({ msg: "bad request!" });
+            });
+            test("400: returns error if body is empty", async () => {
+                const article_id = 2;
+                const commentBody = {};
+                
+                const res = await request(app)
+                    .post(`/api.articles/${article_id}/comments`)
+                    .send(commentBody)
+                    .expect(400)
+    
+                expect(res.body).toEqual({ msg: "bad request!" });
+            });
+        });
     });    
 });
 
@@ -288,99 +384,3 @@ describe("USERS", () => {
     });
 });
 
-describe("POST /api.articles/:article_id/comments", () => {
-    describe("Happy Path", () => {
-        test("201: post new comment to article", async () => {
-            const article_id = 2;
-            const commentBody = {
-                username: "butter_bridge",
-                body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
-            };
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(201)
-
-            const expected = {
-                comment_id: expect.any(Number),
-                author: "butter_bridge",
-                body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much.",
-                article_id: 2,
-                votes: expect.any(Number),
-                created_at: expect.any(String)
-            }
-
-            expect(res.body.comment).toMatchObject(expected);
-        });
-    });
-    describe.only("Unhappy Path", () => {
-        test("404: returns error if article_id is not found", async () => {
-            const article_id = 500;
-            const commentBody = {
-                username: "butter_bridge",
-                body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
-            };
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(404)
-
-            expect(res.body).toEqual({ msg: "not found!" });
-        });
-        test("404: returns error if author is not found", async () => {
-            const article_id = 2;
-            const commentBody = {
-                username: "pail_shrelington",
-                body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
-            };
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(404)
-
-            expect(res.body).toEqual({ msg: "not found!" });
-        });
-        test("400: returns error if invalid article_id is used", async () => {
-            const article_id = "21b4";
-            const commentBody = {
-                username: "butter_bridge",
-                body: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
-            };
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(400)
-
-            expect(res.body).toEqual({ msg: "bad request!" });
-        });
-        test("400: returns error if incorrect key names are used", async () => {
-            const article_id = 2;
-            const commentBody = {
-                author: "butter_bridge",
-                bawdy: "You should be looking everything up. I have very limited brain space and I want to save as much of it as possible for understanding. You're not supposed to know all these things; there's just too much."
-            };
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(400)
-
-            expect(res.body).toEqual({ msg: "bad request!" });
-        });
-        test("400: returns error if body is empty", async () => {
-            const article_id = 2;
-            const commentBody = {};
-            
-            const res = await request(app)
-                .post(`/api.articles/${article_id}/comments`)
-                .send(commentBody)
-                .expect(400)
-
-            expect(res.body).toEqual({ msg: "bad request!" });
-        });
-    });
-});
