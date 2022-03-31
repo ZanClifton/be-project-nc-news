@@ -67,14 +67,14 @@ describe("ARTICLES", () => {
                 .expect(404);
             expect(res.body).toEqual({ msg: "not found!" });
             });
-        });
-        test("400: returns an error for invalid article id", async () => {
-            const article_id = "21b4";
+            test("400: returns an error for invalid article id", async () => {
+                const article_id = "21b4";
 
-            const res = await request(app)
-            .get(`/api/articles/${article_id}`)
-            .expect(400);
-        expect(res.body).toEqual({ msg: "bad request!" });
+                const res = await request(app)
+                .get(`/api/articles/${article_id}`)
+                .expect(400);
+            expect(res.body).toEqual({ msg: "bad request!" });
+            });
         });
     });
 
