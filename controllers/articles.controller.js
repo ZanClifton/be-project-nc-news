@@ -1,5 +1,15 @@
-const { findArticle, changeArticle,  } = require("../models/articles.model");
+const { findArticles, findArticle, changeArticle,  } = require("../models/articles.model");
 const { findComments } = require("../models/comments.model");
+
+exports.getArticles = async (req, res, next) => {
+    try { 
+        const articles = await findArticles();
+        console.log(res, "<< res in controller")
+        res.send({ articles });
+    } catch(err) {
+        next(err);
+    };
+};
 
 exports.getArticle = async (req, res, next) => {
     try {
