@@ -13,10 +13,6 @@ exports.findComments = async (article_id) => {
 }
 
 exports.createComment = async (username, body, article_id) => {
-    let firstQry = `SELECT username FROM users;`;
-
-    // if (firstQry !== null || undefined) {
-    
     let queryStr = `
         INSERT INTO comments 
             (author, body, article_id)
@@ -28,4 +24,15 @@ exports.createComment = async (username, body, article_id) => {
     const results = await db.query(queryStr, [username, body, article_id]);
  
     return results.rows[0]
+}
+
+exports.removeComment = async (comment_id) => {
+    let queryStr = `
+        DELETE FROM comments
+        WHERE comment_id = $1
+        `;
+
+    const results = await db.query(queryStr, [comment_id]);
+
+    return results.rows;
 }

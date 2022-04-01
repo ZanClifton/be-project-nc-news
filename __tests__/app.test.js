@@ -547,4 +547,27 @@ describe("API", () => {
             });
         });
     });
-})
+});
+
+describe("COMMENTS", () => {
+    describe("DELETE /api/comments/:comment_id", () => {
+        describe("Happy Path", () => {
+            test("204: removes comment from db returning no content", async  () => {
+                const comment_id = 3;
+                const res = await request(app)
+                    .delete(`/api/comments/${comment_id}`)
+                    .expect(204)
+            });
+        });
+        describe("Unhappy Path", () => {
+            test("400: comment_id invalid", async () => {
+                const comment_id = "21b4"
+                const res = await request(app)
+                    .delete(`/api/comments/${comment_id}`)
+                    .expect(400)
+
+                expect(res.body).toEqual({ msg: "bad request!"})
+            });
+        });
+    });
+});
