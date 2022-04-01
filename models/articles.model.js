@@ -24,9 +24,6 @@ exports.findArticles = async (sort_by = "created_at", order = "DESC") => {
         return Promise.reject({ status: 400, msg: "use ?order=ASC or ?order=DESC" })
     }
 
-    // let table = "articles"
-    // if (sort_by === "comment_count") table = "comments";
-
     let queryStr = `
     SELECT articles.article_id, articles.title, topic, 
         articles.author, articles.created_at, articles.votes, 

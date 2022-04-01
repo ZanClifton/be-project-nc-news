@@ -145,7 +145,6 @@ describe("ARTICLES", () => {
                 const res = await request(app)
                     .get(`/api/articles/${article_id}/comments`)
                     .expect(200);
-                console.log(res.body)
                 expect(res.body.comments).toEqual([]);
             });
         });
