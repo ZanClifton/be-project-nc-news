@@ -536,9 +536,9 @@ describe("GET /api/articles?[queries]", () => {
 });
 
 describe("COMMENTS", () => {
-    describe.only("DELETE /api/comments/:comment_id", () => {
+    describe("DELETE /api/comments/:comment_id", () => {
         describe("Happy Path", () => {
-            test.only("204: removes comment from db returning no content", async  () => {
+            test("204: removes comment from db returning no content", async  () => {
                 const comment_id = 3;
                 const res = await request(app)
                     .delete(`/api/comments/${comment_id}`)
