@@ -8,6 +8,19 @@ const endpoints = require("../endpoints.json")
 afterAll(() => db.end());
 beforeEach(() => seed(testData));
 
+describe("API", () => {
+    describe("GET /api/articles/:article_id", () => {
+        describe("Happy Path", () => {
+            test("200: returns an object with all endpoints", async () => {
+                const res = await request(app)
+                    .get("/api")
+                    .expect(200);
+                expect(res.body).toMatchObject(endpoints);
+            });
+        });
+    });
+});
+
 describe("ARTICLES", () => {
     describe("GET /api/articles", () => {
         describe("Happy Path", () => {
@@ -168,6 +181,157 @@ describe("ARTICLES", () => {
             });
         });
     });
+
+    describe("GET /api/articles?[queries]", () => {
+        describe("Happy Path", () => {
+            describe("ORDER DESCENDING (DEFAULT)", () => {
+                test("200: returns array of articles sorted by date(default)", async () => {
+                    const res = await request(app)
+                        .get("/api/articles")
+                        .expect(200);
+    
+                    const desc = { descending: true }
+                    
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("created_at", desc);         
+                });
+                test("200: returns array of articles sorted by article_id", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=article_id")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("article_id", desc);         
+                });
+                test("200: returns array of articles sorted by title", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=title")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("title", desc);         
+                });
+                test("200: returns array of articles sorted by topic", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=topic")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("topic", desc);         
+                });
+                test("200: returns array of articles sorted by author", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=author")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("author", desc);         
+                });
+                test("200: returns array of articles sorted by votes", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=votes")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("votes", desc);         
+                });
+                test("200: returns array of articles sorted by comment_count", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=comment_count")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("comment_count", desc);         
+                });
+            });
+            describe("ORDER ASCENDING", () => {
+                test("200: returns array of articles sorted by date(default), ascending", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("created_at");         
+                });
+                test("200: returns array of articles sorted by article_id", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=article_id&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("article_id");         
+                });
+                test("200: returns array of articles sorted by title", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=title&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("title");         
+                });
+                test("200: returns array of articles sorted by topic", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=topic&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("topic");         
+                });
+                test("200: returns array of articles sorted by author", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=author&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("author");         
+                });
+                test("200: returns array of articles sorted by votes", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=votes&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("votes");         
+                });
+                test("200: returns array of articles sorted by comment_count", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?sort_by=comment_count&order=asc")
+                        .expect(200);
+        
+                    expect(res.body.articles).toHaveLength(12);
+                    expect(res.body.articles).toBeSortedBy("comment_count");         
+                });
+            });    
+        });
+        describe("Unhappy Path", () => {
+            test("400: incorrect sort_by value", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=not_this")
+                    .expect(400);
+                expect(res.body).toEqual({
+                     msg: `use ?sort_by= and add the column name you wish to sort by` });
+            });
+            test("400: incorrect order value", async () => {
+                const res = await request(app)
+                    .get("/api/articles?order=not_this_either")
+                    .expect(400);
+                expect(res.body).toEqual({
+                     msg: "use ?order=ASC or ?order=DESC" });
+            });
+        });
+    });
     
     describe("PATCH /api/articles/:article_id", () => {
         describe("Happy Path", () => {
@@ -246,6 +410,7 @@ describe("ARTICLES", () => {
             });
         });
     });
+    
     describe("POST /api.articles/:article_id/comments", () => {
         describe("Happy Path", () => {
             test("201: post new comment to article", async () => {
@@ -344,6 +509,29 @@ describe("ARTICLES", () => {
     });    
 });
 
+describe("COMMENTS", () => {
+    describe("DELETE /api/comments/:comment_id", () => {
+        describe("Happy Path", () => {
+            test("204: removes comment from db returning no content", async  () => {
+                const comment_id = 3;
+                const res = await request(app)
+                    .delete(`/api/comments/${comment_id}`)
+                    .expect(204)
+            });
+        });
+        describe("Unhappy Path", () => {
+            test("400: comment_id invalid", async () => {
+                const comment_id = "21b4"
+                const res = await request(app)
+                    .delete(`/api/comments/${comment_id}`)
+                    .expect(400)
+
+                expect(res.body).toEqual({ msg: "bad request!"})
+            });
+        });
+    });
+});
+
 describe("TOPICS", () => {
     describe("GET /api/topics", () => {
         describe("Happy Path", () => {
@@ -384,190 +572,8 @@ describe("USERS", () => {
     });
 });
 
-describe("GET /api/articles?[queries]", () => {
-    describe("Happy Path", () => {
-        describe("ORDER DESCENDING (DEFAULT)", () => {
-            test("200: returns array of articles sorted by date(default)", async () => {
-                const res = await request(app)
-                    .get("/api/articles")
-                    .expect(200);
 
-                const desc = { descending: true }
-                
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("created_at", desc);         
-            });
-            test("200: returns array of articles sorted by article_id", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=article_id")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("article_id", desc);         
-            });
-            test("200: returns array of articles sorted by title", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=title")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("title", desc);         
-            });
-            test("200: returns array of articles sorted by topic", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=topic")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("topic", desc);         
-            });
-            test("200: returns array of articles sorted by author", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=author")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("author", desc);         
-            });
-            test("200: returns array of articles sorted by votes", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=votes")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("votes", desc);         
-            });
-            test("200: returns array of articles sorted by comment_count", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=comment_count")
-                    .expect(200);
-    
-                    const desc = { descending: true }
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("comment_count", desc);         
-            });
-        });
-        describe("ORDER ASCENDING", () => {
-            test("200: returns array of articles sorted by date(default), ascending", async () => {
-                const res = await request(app)
-                    .get("/api/articles?order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("created_at");         
-            });
-            test("200: returns array of articles sorted by article_id", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=article_id&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("article_id");         
-            });
-            test("200: returns array of articles sorted by title", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=title&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("title");         
-            });
-            test("200: returns array of articles sorted by topic", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=topic&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("topic");         
-            });
-            test("200: returns array of articles sorted by author", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=author&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("author");         
-            });
-            test("200: returns array of articles sorted by votes", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=votes&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("votes");         
-            });
-            test("200: returns array of articles sorted by comment_count", async () => {
-                const res = await request(app)
-                    .get("/api/articles?sort_by=comment_count&order=asc")
-                    .expect(200);
-    
-                expect(res.body.articles).toHaveLength(12);
-                expect(res.body.articles).toBeSortedBy("comment_count");         
-            });
-        });    
-    
-    });
-    describe("Unhappy Path", () => {
-        test("400: incorrect sort_by value", async () => {
-            const res = await request(app)
-                .get("/api/articles?sort_by=not_this")
-                .expect(400);
-            expect(res.body).toEqual({
-                 msg: `use ?sort_by= and add the column name you wish to sort by` });
-        });
-        test("400: incorrect order value", async () => {
-            const res = await request(app)
-                .get("/api/articles?order=not_this_either")
-                .expect(400);
-            expect(res.body).toEqual({
-                 msg: "use ?order=ASC or ?order=DESC" });
-        });
-    });
-});
 
-describe("API", () => {
-    describe("GET /api/articles/:article_id", () => {
-        describe("Happy Path", () => {
-            test("200: returns an object with all endpoints", async () => {
-                const res = await request(app)
-                    .get("/api")
-                    .expect(200);
-                expect(res.body).toMatchObject(endpoints);
-            });
-        });
-    });
-});
 
-describe("COMMENTS", () => {
-    describe("DELETE /api/comments/:comment_id", () => {
-        describe("Happy Path", () => {
-            test("204: removes comment from db returning no content", async  () => {
-                const comment_id = 3;
-                const res = await request(app)
-                    .delete(`/api/comments/${comment_id}`)
-                    .expect(204)
-            });
-        });
-        describe("Unhappy Path", () => {
-            test("400: comment_id invalid", async () => {
-                const comment_id = "21b4"
-                const res = await request(app)
-                    .delete(`/api/comments/${comment_id}`)
-                    .expect(400)
 
-                expect(res.body).toEqual({ msg: "bad request!"})
-            });
-        });
-    });
-});
+
