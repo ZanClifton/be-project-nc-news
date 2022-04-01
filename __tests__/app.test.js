@@ -1,8 +1,9 @@
 const request = require("supertest");
-const db = require("../db/connection.js");
+const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
 const app = require("../app");
+const endpoints = require("../endpoints.json")
 
 afterAll(() => db.end());
 beforeEach(() => seed(testData));
@@ -531,6 +532,19 @@ describe("GET /api/articles?[queries]", () => {
                 .expect(400);
             expect(res.body).toEqual({
                  msg: "use ?order=ASC or ?order=DESC" });
+        });
+    });
+});
+
+describe("API", () => {
+    describe("GET /api/articles/:article_id", () => {
+        describe("Happy Path", () => {
+            test("200: returns an object with all endpoints", async () => {
+                const res = await request(app)
+                    .get("/api")
+                    .expect(200);
+                expect(res.body).toMatchObject(endpoints);
+            });
         });
     });
 });

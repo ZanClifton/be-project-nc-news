@@ -5,5 +5,5 @@ SELECT * FROM users;
 SELECT * FROM articles;
 SELECT * FROM comments;
 
-SELECT author, body FROM comments;
+-- SELECT author, body FROM comments;
 
