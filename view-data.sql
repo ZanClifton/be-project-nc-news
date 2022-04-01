@@ -7,4 +7,3 @@ SELECT * FROM comments;
 
 SELECT author, body FROM comments;
 
-

@@ -24,7 +24,7 @@ describe("ARTICLES", () => {
                             author: expect.any(String),
                             created_at: expect.any(String),
                             votes: expect.any(Number),
-                            comment_count: expect.any(String)
+                            comment_count: expect.any(Number)
                         })
                     );
                 });
@@ -95,7 +95,7 @@ describe("ARTICLES", () => {
                     body: "I find this existence challenging",
                     created_at: "2020-07-09T20:11:00.000Z",
                     votes: 100,
-                    comment_count: "11"  
+                    comment_count: 11  
                 });
             });
         });
@@ -145,7 +145,6 @@ describe("ARTICLES", () => {
                 const res = await request(app)
                     .get(`/api/articles/${article_id}/comments`)
                     .expect(200);
-                console.log(res.body)
                 expect(res.body.comments).toEqual([]);
             });
         });
@@ -384,3 +383,154 @@ describe("USERS", () => {
     });
 });
 
+describe("GET /api/articles?[queries]", () => {
+    describe("Happy Path", () => {
+        describe("ORDER DESCENDING (DEFAULT)", () => {
+            test("200: returns array of articles sorted by date(default)", async () => {
+                const res = await request(app)
+                    .get("/api/articles")
+                    .expect(200);
+
+                const desc = { descending: true }
+                
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("created_at", desc);         
+            });
+            test("200: returns array of articles sorted by article_id", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=article_id")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("article_id", desc);         
+            });
+            test("200: returns array of articles sorted by title", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=title")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("title", desc);         
+            });
+            test("200: returns array of articles sorted by topic", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=topic")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("topic", desc);         
+            });
+            test("200: returns array of articles sorted by author", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=author")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("author", desc);         
+            });
+            test("200: returns array of articles sorted by votes", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=votes")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("votes", desc);         
+            });
+            test("200: returns array of articles sorted by comment_count", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=comment_count")
+                    .expect(200);
+    
+                    const desc = { descending: true }
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("comment_count", desc);         
+            });
+        });
+        describe("ORDER ASCENDING", () => {
+            test("200: returns array of articles sorted by date(default), ascending", async () => {
+                const res = await request(app)
+                    .get("/api/articles?order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("created_at");         
+            });
+            test("200: returns array of articles sorted by article_id", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=article_id&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("article_id");         
+            });
+            test("200: returns array of articles sorted by title", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=title&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("title");         
+            });
+            test("200: returns array of articles sorted by topic", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=topic&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("topic");         
+            });
+            test("200: returns array of articles sorted by author", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=author&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("author");         
+            });
+            test("200: returns array of articles sorted by votes", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=votes&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("votes");         
+            });
+            test("200: returns array of articles sorted by comment_count", async () => {
+                const res = await request(app)
+                    .get("/api/articles?sort_by=comment_count&order=asc")
+                    .expect(200);
+    
+                expect(res.body.articles).toHaveLength(12);
+                expect(res.body.articles).toBeSortedBy("comment_count");         
+            });
+        });    
+    
+    });
+    describe("Unhappy Path", () => {
+        test("400: incorrect sort_by value", async () => {
+            const res = await request(app)
+                .get("/api/articles?sort_by=not_this")
+                .expect(400);
+            expect(res.body).toEqual({
+                 msg: `use ?sort_by= and add the column name you wish to sort by` });
+        });
+        test("400: incorrect order value", async () => {
+            const res = await request(app)
+                .get("/api/articles?order=not_this_either")
+                .expect(400);
+            expect(res.body).toEqual({
+                 msg: "use ?order=ASC or ?order=DESC" });
+        });
+    });
+});
