@@ -1,5 +1,5 @@
-const { findArticles, findArticle, changeArticle,  } = require("../models/articles.model");
-const { findComments } = require("../models/comments.model");
+const { findArticles, findArticle, changeArticle, } = require("../models/articles.model");
+const { findComments, createComment } = require("../models/comments.model");
 
 exports.getArticles = async (req, res, next) => {
     try { 
@@ -51,3 +51,17 @@ exports.patchArticle = async (req, res, next) => {
         next(err);
     };
 };
+
+exports.postComment = async (req, res, next) => {
+    try {
+        const { article_id } = req.params
+        const { username, body } = req.body
+
+        const comment = await createComment(username, body, article_id);
+
+        res.status(201).send({ comment });
+
+    } catch(err) {
+        next(err);
+    }
+}
