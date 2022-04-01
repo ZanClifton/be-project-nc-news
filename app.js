@@ -4,7 +4,8 @@ const {
     getArticles, 
     getArticle, 
     getArticleComments, 
-    patchArticle 
+    patchArticle,
+    postComment 
 } = require("./controllers/articles.controller");
 
 const { getTopics } = require("./controllers/topics.controller");
@@ -22,6 +23,8 @@ app.get("/api/users", getUsers);
 
 app.patch("/api/articles/:article_id", patchArticle);
 
+app.post("/api.articles/:article_id/comments", postComment)
+
 app.use((req, res, next) => {
     res.status(404).send({ msg: "not found!"});
 });
@@ -36,9 +39,20 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    if (err.code === "22P02") {
-        console.log(err, "<< psql handler")
+    const badReq = ["22P02", "23502"]
+    if (badReq.includes(err.code)) {
+        console.log(err, "<< psql 400 handler")
         res.status(400).send({ msg: "bad request!" })
+    } else {
+        next(err);
+    };
+});
+
+app.use((err, req, res, next) => {
+    const badReq = ["23503"]
+    if (badReq.includes(err.code)) {
+        console.log(err, "<< psql 404 handler")
+        res.status(404).send({ msg: "not found!" })
     } else {
         next(err);
     };

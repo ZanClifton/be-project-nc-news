@@ -46,3 +46,6 @@ exports.changeArticle = async (edit, article_id) => {
     return results.rows[0]; 
 };
 
+exports.createComment = async (username, body, article_id) => {
+    
+}
