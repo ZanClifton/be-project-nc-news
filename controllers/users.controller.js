@@ -12,8 +12,6 @@ exports.getUsers = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
     try {
         const { username } = req.params;
-        console.log(req.params, "<< req.params")
-        console.log(username, "<< username")
 
         const user = await findUser(username);
 
