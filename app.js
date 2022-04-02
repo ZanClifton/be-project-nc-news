@@ -6,20 +6,6 @@ const commentRouter = require("./routes/comments-router");
 const topicRouter = require("./routes/topics-router");
 const userRouter = require("./routes/users-router");
 
-// const { getAPI } = require("./controllers/api.controller");
-
-// const { 
-//     getArticles, 
-//     getArticle, 
-//     getArticleComments, 
-//     patchArticle,
-//     postComment 
-// } = require("./controllers/articles.controller");
-
-// const { getTopics } = require("./controllers/topics.controller");
-// const { getUsers } = require("./controllers/users.controller");
-// const { deleteComment } = require("./controllers/comments.controller");
-
 const app = express(); 
 
 app.use(express.json());
@@ -29,19 +15,6 @@ app.use(articleRouter);
 app.use(commentRouter);
 app.use(topicRouter);
 app.use(userRouter);
-
-// app.get("/api", getAPI);
-// app.get("/api/articles", getArticles);
-// app.get("/api/articles/:article_id", getArticle);
-// app.get("/api/articles/:article_id/comments", getArticleComments);
-// app.get("/api/topics", getTopics);
-// app.get("/api/users", getUsers);
-
-// app.patch("/api/articles/:article_id", patchArticle);
-
-// app.post("/api.articles/:article_id/comments", postComment);
-
-// app.delete("/api/comments/:comment_id", deleteComment);
 
 app.use((req, res, next) => {
     res.status(404).send({ msg: "not found!"});
