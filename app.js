@@ -1,35 +1,20 @@
 const express = require("express");
 
-const { getAPI } = require("./controllers/api.controller")
-
-const { 
-    getArticles, 
-    getArticle, 
-    getArticleComments, 
-    patchArticle,
-    postComment 
-} = require("./controllers/articles.controller");
-
-const { getTopics } = require("./controllers/topics.controller");
-const { getUsers } = require("./controllers/users.controller");
-const { deleteComment } = require("./controllers/comments.controller")
+const apiRouter = require("./routes/api-router");
+const articleRouter = require("./routes/articles-router");
+const commentRouter = require("./routes/comments-router");
+const topicRouter = require("./routes/topics-router");
+const userRouter = require("./routes/users-router");
 
 const app = express(); 
 
-app.use(express.json())
+app.use(express.json());
 
-app.get("/api", getAPI)
-app.get("/api/articles", getArticles)
-app.get("/api/articles/:article_id", getArticle);
-app.get("/api/articles/:article_id/comments", getArticleComments)
-app.get("/api/topics", getTopics);
-app.get("/api/users", getUsers);
-
-app.patch("/api/articles/:article_id", patchArticle);
-
-app.post("/api.articles/:article_id/comments", postComment)
-
-app.delete("/api/comments/:comment_id", deleteComment)
+app.use(apiRouter);
+app.use(articleRouter);
+app.use(commentRouter);
+app.use(topicRouter);
+app.use(userRouter);
 
 app.use((req, res, next) => {
     res.status(404).send({ msg: "not found!"});
@@ -47,8 +32,8 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
     const badReq = ["22P02", "23502"]
     if (badReq.includes(err.code)) {
-        console.log(err, "<< psql 400 handler")
-        res.status(400).send({ msg: "bad request!" })
+        console.log(err, "<< psql 400 handler");
+        res.status(400).send({ msg: "bad request!" });
     } else {
         next(err);
     };
@@ -57,8 +42,8 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
     const badReq = ["23503"]
     if (badReq.includes(err.code)) {
-        console.log(err, "<< psql 404 handler")
-        res.status(404).send({ msg: "not found!" })
+        console.log(err, "<< psql 404 handler");
+        res.status(404).send({ msg: "not found!" });
     } else {
         next(err);
     };
