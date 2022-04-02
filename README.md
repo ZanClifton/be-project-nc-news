@@ -9,7 +9,7 @@ Existing users are able to post articles on given topics, as well as to join dis
 ### [I've hosted it on Heroku; try it out now!](https://shrelly-mail-online.herokuapp.com/api)
 [![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)](https://shrelly-mail-online.herokuapp.com/api)
 
-###### Take a look at [a list of all the endpoints you can currently try](https://github.com/ZanClifton/be-project-nc-news/blob/main/endpoints.json) on GitHub (which is much easier for the human eye to read)
+<!-- ###### Take a look at [a list of all the endpoints you can currently try](https://github.com/ZanClifton/be-project-nc-news/blob/main/endpoints.json) on GitHub (which is much easier for the human eye to read) -->
 
 ## Creating A Local Copy
 
