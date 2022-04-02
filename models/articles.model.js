@@ -53,6 +53,20 @@ exports.findArticle = async (article_id) => {
     return results.rows[0];
 };
 
+exports.findArticlesByUser = async (username) => {
+    let queryStr = `
+        SELECT article_id, title, topic, body, created_at, votes 
+        FROM articles
+        WHERE author = $1;
+    `;
+
+    const results = await db.query(queryStr, [username]);
+    if (results.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "not found!" });
+    }
+    return results.rows;
+}
+
 exports.changeArticle = async (edit, article_id) => {
     const { inc_votes } = edit;
 

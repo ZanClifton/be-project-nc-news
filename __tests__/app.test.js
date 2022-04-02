@@ -587,12 +587,48 @@ describe("USERS", () => {
                 });
             });
         });
-        describe("Unappy Path", () => {
+        describe("Unhappy Path", () => {
             test("404: returns an error if user not found", async () => {
                 const username = "better_bodge";
 
                 const res = await request(app)
                     .get(`/api/users/${username}`)
+                    .expect(404);
+
+                expect(res.body).toMatchObject({msg: "not found!"});
+            });
+        });
+    });
+    describe("GET /api/users/:username/articles", () => {
+        describe("Happy Path", () => {
+            test("200: returns an array of articles for selected user", async () => {
+                const username = "butter_bridge";
+
+                const res = await request(app)
+                    .get(`/api/users/${username}/articles`)
+                    .expect(200);
+                expect(res.body.articles.length).toBe(3);
+                res.body.articles.forEach((article) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            article_id: expect.any(Number),
+                            title: expect.any(String),
+                            topic: expect.any(String),
+                            body: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number)
+                        })
+                    );
+                });
+            });
+        });
+
+        describe("Unhappy Path", () => {
+            test("404: returns an error if user not found", async () => {
+                const username = "better_bodge";
+
+                const res = await request(app)
+                    .get(`/api/users/${username}/articles`)
                     .expect(404);
 
                 expect(res.body).toMatchObject({msg: "not found!"});

@@ -1,4 +1,5 @@
 const { findUsers, findUser } = require("../models/users.model");
+const { findArticlesByUser } = require("../models/articles.model");
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -21,3 +22,14 @@ exports.getUser = async (req, res, next) => {
     };
 };
 
+exports.getUserArticles = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+
+        const articles = await findArticlesByUser(username);
+
+        res.send({ articles });
+    } catch (err) {
+        next(err);
+    };
+};
