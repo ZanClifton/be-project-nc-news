@@ -570,6 +570,35 @@ describe("USERS", () => {
             });
         });
     });
+
+    describe("GET /api/users/:username", () => {
+        describe("Happy Path", () => {
+            test("200: returns a user object for selected username", async () => {
+                const username = "butter_bridge";
+
+                const res = await request(app)
+                    .get(`/api/users/${username}`)
+                    .expect(200);
+
+                expect(res.body.user).toMatchObject({
+                    username: "butter_bridge",
+                    name: "jonny",
+                    avatar_url: "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+                });
+            });
+        });
+        describe("Unappy Path", () => {
+            test("404: returns an error if user not found", async () => {
+                const username = "better_bodge";
+
+                const res = await request(app)
+                    .get(`/api/users/${username}`)
+                    .expect(404);
+
+                expect(res.body).toMatchObject({msg: "not found!"});
+            });
+        });
+    });
 });
 
 

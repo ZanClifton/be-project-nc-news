@@ -1,4 +1,4 @@
-const { findUsers } = require("../models/users.model");
+const { findUsers, findUser } = require("../models/users.model");
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -8,3 +8,16 @@ exports.getUsers = async (req, res, next) => {
         next(err);
     };
 };
+
+exports.getUser = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+
+        const user = await findUser(username);
+
+        res.send({ user });
+    } catch (err) {
+        next(err);
+    };
+};
+
