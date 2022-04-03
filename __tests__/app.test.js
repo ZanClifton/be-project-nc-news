@@ -631,7 +631,7 @@ describe("USERS", () => {
                     .get(`/api/users/${username}/articles`)
                     .expect(404);
 
-                expect(res.body).toMatchObject({msg: "not found!"});
+                expect(res.body).toMatchObject({msg: "unable to find articles by better_bodge!"});
             });
         });
     });

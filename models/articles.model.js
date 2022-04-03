@@ -62,7 +62,7 @@ exports.findArticlesByUser = async (username) => {
 
     const results = await db.query(queryStr, [username]);
     if (results.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "not found!" });
+        return Promise.reject({ status: 404, msg: `unable to find articles by ${username}!` });
     }
     return results.rows;
 }
