@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-exports.findArticles = async (sort_by = "created_at", order = "DESC") => {
+exports.findArticles = async (sort_by = "created_at", order = "DESC", topic) => {
     sort_by = sort_by.toLowerCase();
     order = order.toUpperCase();
 
@@ -14,7 +14,7 @@ exports.findArticles = async (sort_by = "created_at", order = "DESC") => {
         "comment_count"
     ];
     const validOrder = ["ASC", "DESC"];
-    
+
     if (!validSortBy.includes(sort_by)) {
         return Promise.reject({ 
             status: 400, msg: `use ?sort_by= and add the column name you wish to sort by`})
@@ -24,16 +24,27 @@ exports.findArticles = async (sort_by = "created_at", order = "DESC") => {
         return Promise.reject({ status: 400, msg: "use ?order=ASC or ?order=DESC" })
     }
 
+    let queryVals = [];
+    let searchStr = "";
+
+  if (topic !== undefined) {
+    searchStr = ` WHERE articles.topic = $1 `;
+    queryVals.push(topic);
+  }
+
     let queryStr = `
     SELECT articles.article_id, articles.title, topic, 
         articles.author, articles.created_at, articles.votes, 
         COUNT(comment_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
+    ${searchStr}
     GROUP BY articles.article_id
     ORDER BY ${sort_by} ${order};`;
 
-    const results = await db.query(queryStr);
+    const results = await db.query(queryStr, queryVals);
+    console.log(queryStr, "<< queryStr")
+    console.log(queryVals, "<< queryVals")
     return results.rows;
 };
 

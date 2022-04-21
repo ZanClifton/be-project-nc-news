@@ -9,6 +9,6 @@ SELECT * FROM articles;
 
 SELECT article_id, title, topic, body, created_at, votes 
 FROM articles
-WHERE author = 'butter_bridge';
+WHERE topic = 'coding';
 
 -- article_id, title, topic, body, created_at, votes 

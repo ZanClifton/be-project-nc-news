@@ -195,6 +195,16 @@ describe("ARTICLES", () => {
                     expect(res.body.articles).toHaveLength(12);
                     expect(res.body.articles).toBeSortedBy("created_at", desc);         
                 });
+                test("200: returns array of articles from a specified topic", async () => {
+                    const res = await request(app)
+                        .get("/api/articles?topic=mitch")
+                        .expect(200);
+        
+                        const desc = { descending: true }
+        
+                    expect(res.body.articles).toHaveLength(11);
+                    expect(res.body.articles).toBeSortedBy("created_at", desc);         
+                });
                 test("200: returns array of articles sorted by article_id", async () => {
                     const res = await request(app)
                         .get("/api/articles?sort_by=article_id")
@@ -636,6 +646,7 @@ describe("USERS", () => {
         });
     });
 });
+
 
 
 

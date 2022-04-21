@@ -3,8 +3,8 @@ const { findComments, createComment } = require("../models/comments.model");
 
 exports.getArticles = async (req, res, next) => {
     try { 
-        const { sort_by, order } = req.query;
-        const articles = await findArticles(sort_by, order);
+        const { sort_by, order, topic } = req.query;
+        const articles = await findArticles(sort_by, order, topic);
     
         res.send({ articles });
     } catch(err) {
