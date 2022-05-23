@@ -97,6 +97,7 @@ The above commands will also enable you to check your own version in the termina
 # ![Shrelly Mail Online](https://github.com/ZanClifton/be-project-nc-news/blob/main/shrelly-mail-online.jpeg)
 
 <div align=right>
-  <h6> Project created with thanks to: <a href="https://northcoders.com/">Northcoders</a></h6>
-  <h6>README.md created with thanks to: <a href="https://git.io/typing-svg">DenverCoder1</a> (ReadMe Typing SVG) | <a href="https://shields.io/">Shields IO</a> (Badges)</h6> 
+  <h6> Project created with thanks to: <a href="https://northcoders.com/">Northcoders</a>
+  <p>README.md created with thanks to: <br>ReadMe Typing SVG | <a href="https://git.io/typing-svg">DenverCoder1</a>  
+    <br>Badges | <a href="https://shields.io/">Shields IO</a></h6></p> 
 </div>
