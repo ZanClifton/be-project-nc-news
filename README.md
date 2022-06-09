@@ -79,7 +79,7 @@ $ npm test
 
 Start the server listening with:
 ```
-npm start
+$ npm start
 ```
 You can use a regular browser to make requests, or install a free framework for testing RESTful applications such as [Insomnia](https://insomnia.rest/download)
 
